@@ -8,7 +8,7 @@ load_dotenv()
 
 # Import tools and prompts
 from tools.general_tools import get_config_value, write_config_value
-from prompts.agent_prompt import all_nasdaq_100_symbols
+from prompts.agent_prompt import all_crypto_symbols
 
 
 # Agent class mapping table - for dynamic import and instantiation
@@ -69,8 +69,8 @@ def load_config(config_path=None):
         dict: Configuration dictionary
     """
     if config_path is None:
-        # Default configuration file path
-        config_path = Path(__file__).parent / "configs" / "default_config.json"
+        # Default configuration file path - use OKX config as default
+        config_path = Path(__file__).parent / "configs" / "okx_crypto_config.json"
     else:
         config_path = Path(config_path)
     
@@ -185,7 +185,7 @@ async def main(config_path=None):
             agent = AgentClass(
                 signature=signature,
                 basemodel=basemodel,
-                stock_symbols=all_nasdaq_100_symbols,
+                stock_symbols=all_crypto_symbols,
                 log_path=log_path,
                 openai_base_url=openai_base_url,
                 openai_api_key=openai_api_key,
@@ -235,7 +235,7 @@ if __name__ == "__main__":
     if config_path:
         print(f"📄 Using specified configuration file: {config_path}")
     else:
-        print(f"📄 Using default configuration file: configs/default_config.json")
+        print(f"📄 Using default configuration file: configs/okx_crypto_config.json")
     
     asyncio.run(main(config_path))
 
