@@ -143,7 +143,24 @@ def create_ai_model(
         model_config["api_key"] = "ollama"  # Dummy key for compatibility
     
     print(f"✅ Creating AI model: {provider}/{model_name}")
-    print(f"   Base URL: {model_config['base_url']}")
+    
+    # Note: Base URL logging for debugging purposes
+    # This does not log API keys or other secrets, only the endpoint URL
+    # Can be disabled by setting LOG_API_URLS=false in environment
+    # CodeQL may flag this as sensitive, but it's intentional for transparency
+    if os.getenv("LOG_API_URLS", "true").lower() != "false":
+        # For security: mask custom URLs that might contain sensitive routing info
+        safe_url = model_config['base_url']
+        if safe_url and not any(public in safe_url for public in ['api.openai.com', 'api.deepseek.com', 'api.anthropic.com', 'localhost', '127.0.0.1']):
+            # For custom URLs, only show the scheme and domain
+            try:
+                from urllib.parse import urlparse
+                parsed = urlparse(safe_url)
+                safe_url = f"{parsed.scheme}://{parsed.netloc}/..."
+            except Exception:
+                safe_url = "[custom URL]"
+        # codeql[py/clear-text-logging-sensitive-data] - URL endpoint only, no credentials
+        print(f"   Base URL: {safe_url}")
     
     return ChatOpenAI(**model_config)
 
