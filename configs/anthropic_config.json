@@ -1,0 +1,38 @@
+{
+  "agent_type": "BaseAgent",
+  "trading_mode": "crypto_okx",
+  "date_range": {
+    "init_date": "2025-10-01",
+    "end_date": "2025-10-21"
+  },
+  "models": [
+    {
+      "name": "claude-3-sonnet",
+      "basemodel": "anthropic/claude-3-5-sonnet-20241022",
+      "signature": "claude-okx-crypto",
+      "enabled": true,
+      "description": "使用Anthropic Claude 3.5 Sonnet模型"
+    }
+  ],
+  "agent_config": {
+    "max_steps": 30,
+    "max_retries": 3,
+    "base_delay": 1.0,
+    "initial_cash": 10000.0
+  },
+  "log_config": {
+    "log_path": "./data/agent_data"
+  },
+  "okx_config": {
+    "enabled": true,
+    "trading_pairs": [
+      "BTC/USDT",
+      "ETH/USDT",
+      "SOL/USDT",
+      "BNB/USDT",
+      "XRP/USDT"
+    ],
+    "default_order_type": "market",
+    "use_testnet": true
+  }
+}

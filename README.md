@@ -45,7 +45,13 @@ AI-Trader 是一个完全自主的AI加密货币交易系统，让多个大语�
 
 - Python 3.8+
 - OKX 交易所账户和 API 密钥
-- OpenAI API 密钥（或其他支持的AI模型）
+- AI 模型 API 密钥（支持多种选择）:
+  - OpenAI (GPT-4, GPT-3.5)
+  - Ollama (本地部署，免费)
+  - DeepSeek (高性价比)
+  - Anthropic Claude
+  - GitHub Copilot (企业版)
+  - Google Gemini
 
 ### ⚡ 一键安装
 
@@ -61,7 +67,10 @@ pip install -r requirements.txt
 cp .env.example .env
 # 编辑 .env 文件，填入你的 API 密钥
 
-# 4. 启动服务
+# 4. 验证配置（可选但推荐）
+python main.py --validate-only
+
+# 5. 启动服务
 ./main.sh
 ```
 
@@ -74,9 +83,16 @@ cp .env.example .env
 在 `.env` 文件中配置以下变量：
 
 ```bash
-# AI 模型 API
+# AI 模型 API (选择一个或多个)
 OPENAI_API_BASE=https://api.openai.com/v1
 OPENAI_API_KEY=your_openai_key
+
+# Ollama 本地模型（可选）
+OLLAMA_API_BASE=http://localhost:11434/v1
+
+# DeepSeek API（可选）
+DEEPSEEK_API_BASE=https://api.deepseek.com/v1
+DEEPSEEK_API_KEY=your_deepseek_key
 
 # OKX 交易所 API
 OKX_API_KEY=your_okx_api_key
@@ -91,6 +107,8 @@ JINA_API_KEY=your_jina_key
 INITIAL_CASH_USDT=10000.0
 AGENT_MAX_STEP=30
 ```
+
+**更多 AI 提供商配置请查看：[🤖 AI Providers Guide](docs/AI_PROVIDERS_GUIDE.md)**
 
 ---
 
@@ -111,6 +129,12 @@ AGENT_MAX_STEP=30
       "basemodel": "openai/gpt-5",
       "signature": "gpt-5-okx-crypto",
       "enabled": true
+    },
+    {
+      "name": "ollama-llama3",
+      "basemodel": "ollama/llama3",
+      "signature": "llama3-okx-crypto",
+      "enabled": false
     }
   ],
   "agent_config": {
@@ -282,6 +306,8 @@ list_okx_markets(trading_type="swap")
 ## 📖 文档
 
 - [📦 详细部署教程](DEPLOYMENT.md) - 完整的部署和配置指南
+- [🤖 AI Providers Guide](docs/AI_PROVIDERS_GUIDE.md) - AI 提供商配置指南
+- [🚀 Production Guide](docs/PRODUCTION_GUIDE.md) - 生产环境部署指南
 - [🔧 OKX 集成指南](docs/OKX_INTEGRATION_GUIDE.md) - OKX API 使用说明
 - [💬 社区交流](Communication.md) - 加入我们的社区
 
