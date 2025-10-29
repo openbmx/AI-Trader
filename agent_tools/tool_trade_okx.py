@@ -18,9 +18,13 @@ import json
 mcp = FastMCP("OKXTradeTools")
 
 
-def get_okx_client():
+def get_okx_client(trading_type: str = "spot"):
     """
     Get OKX exchange client instance
+    
+    Args:
+        trading_type: Trading type - "spot" for spot trading, "swap" for perpetual futures,
+                     "future" for delivery futures, "option" for options
     
     Returns:
         ccxt.okx: OKX exchange client
@@ -42,7 +46,7 @@ def get_okx_client():
         'password': passphrase,
         'enableRateLimit': True,
         'options': {
-            'defaultType': 'spot',  # Use spot trading
+            'defaultType': trading_type,  # 支持 spot, swap, future, option
         }
     })
     
@@ -53,18 +57,19 @@ def get_okx_client():
     return exchange
 
 
-def get_current_price(symbol: str) -> float:
+def get_current_price(symbol: str, trading_type: str = "spot") -> float:
     """
     Get current market price for a trading pair
     
     Args:
-        symbol: Trading pair symbol (e.g., "BTC/USDT")
+        symbol: Trading pair symbol (e.g., "BTC/USDT" for spot, "BTC/USDT:USDT" for swap)
+        trading_type: Trading type - "spot", "swap", "future", "option"
         
     Returns:
         Current market price
     """
     try:
-        exchange = get_okx_client()
+        exchange = get_okx_client(trading_type)
         ticker = exchange.fetch_ticker(symbol)
         return ticker['last']
     except Exception as e:
@@ -73,17 +78,22 @@ def get_current_price(symbol: str) -> float:
 
 
 @mcp.tool()
-def buy_okx(symbol: str, amount: float, order_type: str = "market") -> Dict[str, Any]:
+def buy_okx(symbol: str, amount: float, order_type: str = "market", trading_type: str = "spot") -> Dict[str, Any]:
     """
     Buy cryptocurrency on OKX exchange
     
     This function executes buy orders for cryptocurrency trading pairs.
-    Supports both market and limit orders.
+    Supports both market and limit orders, and both spot and futures trading.
     
     Args:
-        symbol: Trading pair symbol (e.g., "BTC/USDT", "ETH/USDT")
+        symbol: Trading pair symbol 
+                - For spot: "BTC/USDT", "ETH/USDT"
+                - For perpetual swap: "BTC/USDT:USDT", "ETH/USDT:USDT"
+                - For delivery futures: "BTC/USDT:USDT-240329" (with expiry date)
         amount: Amount of base currency to buy (e.g., 0.001 BTC)
         order_type: Order type - "market" or "limit" (default: "market")
+        trading_type: Trading type - "spot" for spot trading, "swap" for perpetual futures,
+                     "future" for delivery futures (default: "spot")
         
     Returns:
         Dict[str, Any]:
@@ -91,8 +101,10 @@ def buy_okx(symbol: str, amount: float, order_type: str = "market") -> Dict[str,
           - Failure: Returns {"error": error message, ...}
         
     Example:
-        >>> result = buy_okx("BTC/USDT", 0.001)
-        >>> print(result)  # {"order_id": "...", "symbol": "BTC/USDT", ...}
+        >>> # Spot trading
+        >>> result = buy_okx("BTC/USDT", 0.001, trading_type="spot")
+        >>> # Perpetual swap (futures)
+        >>> result = buy_okx("BTC/USDT:USDT", 1, trading_type="swap")
     """
     signature = get_config_value("SIGNATURE")
     if signature is None:
@@ -105,7 +117,7 @@ def buy_okx(symbol: str, amount: float, order_type: str = "market") -> Dict[str,
         current_position, current_action_id = get_latest_position_okx(today_date, signature)
         
         # Get current price
-        current_price = get_current_price(symbol)
+        current_price = get_current_price(symbol, trading_type)
         
         # Calculate cost
         cost = current_price * amount
@@ -158,7 +170,8 @@ def buy_okx(symbol: str, amount: float, order_type: str = "market") -> Dict[str,
                     "symbol": symbol,
                     "amount": amount,
                     "price": current_price,
-                    "cost": cost
+                    "cost": cost,
+                    "trading_type": trading_type
                 },
                 "positions": new_position,
                 "order_info": order
@@ -186,17 +199,22 @@ def buy_okx(symbol: str, amount: float, order_type: str = "market") -> Dict[str,
 
 
 @mcp.tool()
-def sell_okx(symbol: str, amount: float, order_type: str = "market") -> Dict[str, Any]:
+def sell_okx(symbol: str, amount: float, order_type: str = "market", trading_type: str = "spot") -> Dict[str, Any]:
     """
     Sell cryptocurrency on OKX exchange
     
     This function executes sell orders for cryptocurrency trading pairs.
-    Supports both market and limit orders.
+    Supports both market and limit orders, and both spot and futures trading.
     
     Args:
-        symbol: Trading pair symbol (e.g., "BTC/USDT", "ETH/USDT")
+        symbol: Trading pair symbol
+                - For spot: "BTC/USDT", "ETH/USDT"
+                - For perpetual swap: "BTC/USDT:USDT", "ETH/USDT:USDT"
+                - For delivery futures: "BTC/USDT:USDT-240329" (with expiry date)
         amount: Amount of base currency to sell (e.g., 0.001 BTC)
         order_type: Order type - "market" or "limit" (default: "market")
+        trading_type: Trading type - "spot" for spot trading, "swap" for perpetual futures,
+                     "future" for delivery futures (default: "spot")
         
     Returns:
         Dict[str, Any]:
@@ -204,8 +222,10 @@ def sell_okx(symbol: str, amount: float, order_type: str = "market") -> Dict[str
           - Failure: Returns {"error": error message, ...}
         
     Example:
-        >>> result = sell_okx("BTC/USDT", 0.001)
-        >>> print(result)  # {"order_id": "...", "symbol": "BTC/USDT", ...}
+        >>> # Spot trading
+        >>> result = sell_okx("BTC/USDT", 0.001, trading_type="spot")
+        >>> # Perpetual swap (futures)
+        >>> result = sell_okx("BTC/USDT:USDT", 1, trading_type="swap")
     """
     signature = get_config_value("SIGNATURE")
     if signature is None:
@@ -231,7 +251,7 @@ def sell_okx(symbol: str, amount: float, order_type: str = "market") -> Dict[str
             }
         
         # Get current price
-        current_price = get_current_price(symbol)
+        current_price = get_current_price(symbol, trading_type)
         
         # Calculate proceeds
         proceeds = current_price * amount
@@ -270,7 +290,8 @@ def sell_okx(symbol: str, amount: float, order_type: str = "market") -> Dict[str
                     "symbol": symbol,
                     "amount": amount,
                     "price": current_price,
-                    "proceeds": proceeds
+                    "proceeds": proceeds,
+                    "trading_type": trading_type
                 },
                 "positions": new_position,
                 "order_info": order

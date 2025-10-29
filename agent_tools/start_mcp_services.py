@@ -23,8 +23,6 @@ class MCPServiceManager:
         self.ports = {
             'math': int(os.getenv('MATH_HTTP_PORT', '8000')),
             'search': int(os.getenv('SEARCH_HTTP_PORT', '8001')),
-            'trade': int(os.getenv('TRADE_HTTP_PORT', '8002')),
-            'price': int(os.getenv('GETPRICE_HTTP_PORT', '8003')),
             'trade_okx': int(os.getenv('TRADE_OKX_HTTP_PORT', '8004')),
             'price_okx': int(os.getenv('GETPRICE_OKX_HTTP_PORT', '8005'))
         }
@@ -41,27 +39,15 @@ class MCPServiceManager:
                 'name': 'Search',
                 'port': self.ports['search']
             },
-            'trade': {
-                'script': 'tool_trade.py',
-                'name': 'TradeTools',
-                'port': self.ports['trade']
-            },
-            'price': {
-                'script': 'tool_get_price_local.py',
-                'name': 'LocalPrices',
-                'port': self.ports['price']
-            },
             'trade_okx': {
                 'script': 'tool_trade_okx.py',
                 'name': 'OKXTradeTools',
-                'port': self.ports['trade_okx'],
-                'optional': True  # Mark as optional since it requires OKX API credentials
+                'port': self.ports['trade_okx']
             },
             'price_okx': {
                 'script': 'tool_get_price_okx.py',
                 'name': 'OKXPriceTools',
-                'port': self.ports['price_okx'],
-                'optional': True  # Mark as optional
+                'port': self.ports['price_okx']
             }
         }
         

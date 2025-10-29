@@ -1,343 +1,102 @@
 <div align="center">
 
-# 🚀 AI-Trader: Can AI Beat the Market?
+# 🚀 AI-Trader: AI驱动的加密货币交易系统
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Feishu](https://img.shields.io/badge/💬Feishu-Group-blue?style=flat)](./Communication.md) 
-[![WeChat](https://img.shields.io/badge/WeChat-Group-green?style=flat&logo=wechat)](./Communication.md)
 
-**Five AIs battle for NASDAQ 100 supremacy. Zero human input. Pure competition.**
+**让多个AI模型在加密货币市场中完全自主决策、同台竞技！**
 
-## 🏆 Current Championship Leaderboard 🏆 
-[*Click Here: AI Live Trading*](https://hkuds.github.io/AI-Trader/)
-
-<div align="center">
-
-###  **Championship Period: (Last Update 2025/10/28)**
-
-| 🏆 Rank | 🤖 AI Model | 📈 Total Earnings | 
-|---------|-------------|----------------|
-| **🥇 1st** | **DeepSeek** | 🚀 +14.38% |
-| 🥈 2nd | MiniMax-M2 | 📊 +10.99% |
-| 🥉 3rd | GPT-5 | 📊 +8.39% |
-| 4th | Claude-3.7 | 📊 +7.96% |
-| 5th | Qwen3-max | 📊 +6.14% |
-| Baseline | QQQ | 📊 +4.92% |
-| 6th | Gemini-2.5-flash | 📊 -0.71% |
-
-### 📊 **Live Performance Dashboard**
-![rank](assets/rank.png)
-
-*Daily Performance Tracking of AI Models in NASDAQ 100 Trading*
+[🚀 快速开始](#-快速开始) • [📖 部署教程](DEPLOYMENT.md) • [🛠️ 配置指南](#-配置指南) • [💡 功能特性](#-核心特性)
 
 </div>
 
 ---
 
-## 📝 Upcoming Updates (This Week)
+## 🌟 项目介绍
 
-We're excited to announce the following updates coming this week:
+AI-Trader 是一个完全自主的AI加密货币交易系统，让多个大语言模型在OKX交易所进行7x24小时的自主交易竞赛。
 
-- ⏰ **Hourly Trading Support** - Upgrade to hour-level precision trading 
-- 🚀 **Service Deployment & Parallel Execution** - Deploy production service + parallel model execution
-- 🎨 **Enhanced Frontend Dashboard** - Add detailed trading log visualization (complete trading process display)
+### ✨ 核心特性
 
-Stay tuned for these exciting improvements! 🎉
-
----
-
-[🚀 Quick Start](#-quick-start) • [📈 Performance Analysis](#-performance-analysis) • [🛠️ Configuration Guide](#-configuration-guide) • [中文文档](README_CN.md)
-
-</div>
+- 🤖 **完全自主决策**: AI代理100%独立分析、决策、执行，零人工干预
+- 💱 **OKX交易所支持**: 完整支持现货和永续合约交易
+- 🛠️ **纯工具驱动**: 基于MCP工具链的标准化工具调用架构
+- 🏆 **多模型竞技**: 支持多个AI模型（GPT、Claude、Qwen等）同时交易
+- 📊 **实时监控**: 完整的交易记录、持仓管理和性能分析
+- 🔍 **智能资讯**: 集成Jina AI搜索，获取实时市场新闻
+- 🌐 **7x24交易**: 全天候加密货币市场交易
 
 ---
 
-## 🌟 Project Introduction
+## 🎮 交易环境
 
-> **AI-Trader enables five distinct AI models, each employing unique investment strategies, to compete autonomously in the same market and determine which can generate the highest profits in NASDAQ 100 trading!**
-
-### 🎯 Core Features
-
-- 🤖 **Fully Autonomous Decision-Making**: AI agents perform 100% independent analysis, decision-making, and execution without human intervention
-- 🛠️ **Pure Tool-Driven Architecture**: Built on MCP toolchain, enabling AI to complete all trading operations through standardized tool calls
-- 🏆 **Multi-Model Competition Arena**: Deploy multiple AI models (GPT, Claude, Qwen, etc.) for competitive trading
-- 📊 **Real-Time Performance Analytics**: Comprehensive trading records, position monitoring, and profit/loss analysis
-- 🔍 **Intelligent Market Intelligence**: Integrated Jina search for real-time market news and financial reports
-- ⚡ **MCP Toolchain Integration**: Modular tool ecosystem based on Model Context Protocol
-- 🔌 **Extensible Strategy Framework**: Support for third-party strategies and custom AI agent integration
-- ⏰ **Historical Replay Capability**: Time-period replay functionality with automatic future information filtering
+- 💰 **初始资金**: 10,000 USDT
+- 📈 **交易标的**: 主流加密货币（BTC、ETH、SOL等）
+- ⏰ **交易时间**: 7x24小时全天候
+- 💹 **交易类型**: 支持现货和永续合约
+- 📊 **数据来源**: OKX交易所实时数据
 
 ---
 
-### 🎮 Trading Environment
-Each AI model starts with $10,000 to trade NASDAQ 100 stocks in a controlled environment with real market data and historical replay capabilities.
+## 🚀 快速开始
 
-- 💰 **Initial Capital**: $10,000 USD starting balance
-- 📈 **Trading Universe**: NASDAQ 100 component stocks (top 100 technology stocks)
-- ⏰ **Trading Schedule**: Weekday market hours with historical simulation support
-- 📊 **Data Integration**: Alpha Vantage API combined with Jina AI market intelligence
-- 🔄 **Time Management**: Historical period replay with automated future information filtering
+### 📋 前置要求
 
----
+- Python 3.8+
+- OKX 交易所账户和 API 密钥
+- OpenAI API 密钥（或其他支持的AI模型）
 
-### 🧠 Agentic Trading Capabilities
-AI agents operate with complete autonomy, conducting market research, making trading decisions, and continuously evolving their strategies without human intervention.
-
-- 📰 **Autonomous Market Research**: Intelligent retrieval and filtering of market news, analyst reports, and financial data
-- 💡 **Independent Decision Engine**: Multi-dimensional analysis driving fully autonomous buy/sell execution
-- 📝 **Comprehensive Trade Logging**: Automated documentation of trading rationale, execution details, and portfolio changes
-- 🔄 **Adaptive Strategy Evolution**: Self-optimizing algorithms that adjust based on market performance feedback
-
----
-
-### 🏁 Competition Rules
-All AI models compete under identical conditions with the same capital, data access, tools, and evaluation metrics to ensure fair comparison.
-
-- 💰 **Starting Capital**: $10,000 USD initial investment
-- 📊 **Data Access**: Uniform market data and information feeds
-- ⏰ **Operating Hours**: Synchronized trading time windows
-- 📈 **Performance Metrics**: Standardized evaluation criteria across all models
-- 🛠️ **Tool Access**: Identical MCP toolchain for all participants
-
-🎯 **Objective**: Determine which AI model achieves superior investment returns through pure autonomous operation!
-
-### 🚫 Zero Human Intervention
-AI agents operate with complete autonomy, making all trading decisions and strategy adjustments without any human programming, guidance, or intervention.
-
-- ❌ **No Pre-Programming**: Zero preset trading strategies or algorithmic rules
-- ❌ **No Human Input**: Complete reliance on inherent AI reasoning capabilities
-- ❌ **No Manual Override**: Absolute prohibition of human intervention during trading
-- ✅ **Tool-Only Execution**: All operations executed exclusively through standardized tool calls
-- ✅ **Self-Adaptive Learning**: Independent strategy refinement based on market performance feedback
-
----
-
-## ⏰ Historical Replay Architecture
-
-A core innovation of AI-Trader Bench is its **fully replayable** trading environment, ensuring scientific rigor and reproducibility in AI agent performance evaluation on historical market data.
-
-### 🔄 Temporal Control Framework
-
-#### 📅 Flexible Time Settings
-```json
-{
-  "date_range": {
-    "init_date": "2025-01-01",  // Any start date
-    "end_date": "2025-01-31"    // Any end date
-  }
-}
-```
----
-
-### 🛡️ Anti-Look-Ahead Data Controls
-AI can only access market data from current time and before. No future information allowed.
-
-- 📊 **Price Data Boundaries**: Market data access limited to simulation timestamp and historical records
-- 📰 **News Chronology Enforcement**: Real-time filtering prevents access to future-dated news and announcements
-- 📈 **Financial Report Timeline**: Information restricted to officially published data as of current simulation date
-- 🔍 **Historical Intelligence Scope**: Market analysis constrained to chronologically appropriate data availability
-
-### 🎯 Replay Advantages
-
-#### 🔬 Empirical Research Framework
-- 📊 **Market Efficiency Studies**: Evaluate AI performance across diverse market conditions and volatility regimes
-- 🧠 **Decision Consistency Analysis**: Examine temporal stability and behavioral patterns in AI trading logic
-- 📈 **Risk Management Assessment**: Validate effectiveness of AI-driven risk mitigation strategies
-
-#### 🎯 Fair Competition Framework
-- 🏆 **Equal Information Access**: All AI models operate with identical historical datasets
-- 📊 **Standardized Evaluation**: Performance metrics calculated using uniform data sources
-- 🔍 **Full Reproducibility**: Complete experimental transparency with verifiable results
-
----
-
-## 📁 Project Architecture
-
-```
-AI-Trader Bench/
-├── 🤖 Core System
-│   ├── main.py    # 🎯 Main program entry
-│   ├── agent/base_agent/          # 🧠 AI agent core
-│   └── configs/                   # ⚙️ Configuration files
-│
-├── 🛠️ MCP Toolchain
-│   ├── agent_tools/
-│   │   ├── tool_trade.py          # 💰 Trade execution
-│   │   ├── tool_get_price_local.py # 📊 Price queries
-│   │   ├── tool_jina_search.py   # 🔍 Information search
-│   │   └── tool_math.py           # 🧮 Mathematical calculations
-│   └── tools/                     # 🔧 Auxiliary tools
-│
-├── 📊 Data System
-│   ├── data/
-│   │   ├── daily_prices_*.json    # 📈 Stock price data
-│   │   ├── merged.jsonl           # 🔄 Unified data format
-│   │   └── agent_data/            # 📝 AI trading records
-│   └── calculate_performance.py   # 📈 Performance analysis
-│
-├── 🎨 Frontend Interface
-│   └── frontend/                  # 🌐 Web dashboard
-│
-└── 📋 Configuration & Documentation
-    ├── configs/                   # ⚙️ System configuration
-    ├── prompts/                   # 💬 AI prompts
-    └── calc_perf.sh              # 🚀 Performance calculation script
-```
-
-### 🔧 Core Components Details
-
-#### 🎯 Main Program (`main.py`)
-- **Multi-Model Concurrency**: Run multiple AI models simultaneously for trading
-- **Configuration Management**: Support for JSON configuration files and environment variables
-- **Date Management**: Flexible trading calendar and date range settings
-- **Error Handling**: Comprehensive exception handling and retry mechanisms
-
-#### 🛠️ MCP Toolchain
-| Tool | Function | API |
-|------|----------|-----|
-| **Trading Tool** | Buy/sell stocks, position management | `buy()`, `sell()` |
-| **Price Tool** | Real-time and historical price queries | `get_price_local()` |
-| **Search Tool** | Market information search | `get_information()` |
-| **Math Tool** | Financial calculations and analysis | Basic mathematical operations |
-
-#### 📊 Data System
-- **📈 Price Data**: Complete OHLCV data for NASDAQ 100 component stocks
-- **📝 Trading Records**: Detailed trading history for each AI model
-- **📊 Performance Metrics**: Sharpe ratio, maximum drawdown, annualized returns, etc.
-- **🔄 Data Synchronization**: Automated data acquisition and update mechanisms
-
-## 🚀 Quick Start
-
-### 📋 Prerequisites
-
-- **Python 3.8+** 
-- **API Keys**: OpenAI, Alpha Vantage, Jina AI
-
-### ⚡ One-Click Installation
+### ⚡ 一键安装
 
 ```bash
-# 1. Clone project
-git clone https://github.com/HKUDS/AI-Trader.git
+# 1. 克隆项目
+git clone https://github.com/openbmx/AI-Trader.git
 cd AI-Trader
 
-# 2. Install dependencies
+# 2. 安装依赖
 pip install -r requirements.txt
 
-# 3. Configure environment variables
+# 3. 配置环境变量
 cp .env.example .env
-# Edit .env file and fill in your API keys
+# 编辑 .env 文件，填入你的 API 密钥
+
+# 4. 启动服务
+./main.sh
 ```
 
-### 🔑 Environment Configuration
+**详细部署教程请查看：[📖 DEPLOYMENT.md](DEPLOYMENT.md)**
 
-Create `.env` file and configure the following variables:
+---
+
+## 🔑 环境配置
+
+在 `.env` 文件中配置以下变量：
 
 ```bash
-# 🤖 AI Model API Configuration
-OPENAI_API_BASE=https://your-openai-proxy.com/v1
+# AI 模型 API
+OPENAI_API_BASE=https://api.openai.com/v1
 OPENAI_API_KEY=your_openai_key
 
-# 📊 Data Source Configuration
-ALPHAADVANTAGE_API_KEY=your_alpha_vantage_key
-JINA_API_KEY=your_jina_api_key
+# OKX 交易所 API
+OKX_API_KEY=your_okx_api_key
+OKX_API_SECRET=your_okx_secret
+OKX_PASSPHRASE=your_okx_passphrase
+OKX_TESTNET=true  # 建议先使用测试网
 
-# ⚙️ System Configuration
-RUNTIME_ENV_PATH=./runtime_env.json # Recommended to use absolute path
+# Jina AI 搜索
+JINA_API_KEY=your_jina_key
 
-# 🌐 Service Port Configuration
-MATH_HTTP_PORT=8000
-SEARCH_HTTP_PORT=8001
-TRADE_HTTP_PORT=8002
-GETPRICE_HTTP_PORT=8003
-# 🧠 AI Agent Configuration
-AGENT_MAX_STEP=30             # Maximum reasoning steps
+# 其他配置
+INITIAL_CASH_USDT=10000.0
+AGENT_MAX_STEP=30
 ```
 
-### 📦 Dependencies
+---
 
-```bash
-# Install production dependencies
-pip install -r requirements.txt
+## 🛠️ 配置指南
 
-# Or manually install core dependencies
-pip install langchain langchain-openai langchain-mcp-adapters fastmcp python-dotenv requests numpy pandas
-```
-
-## 🎮 Running Guide
-
-### 📊 Step 1: Data Preparation (`./fresh_data.sh`)
-
-```bash
-# 📈 Get NASDAQ 100 stock data
-cd data
-python get_daily_price.py
-
-# 🔄 Merge data into unified format
-python merge_jsonl.py
-```
-
-### 🛠️ Step 2: Start MCP Services
-
-```bash
-cd ./agent_tools
-python start_mcp_services.py
-```
-
-### 🚀 Step 3: Start AI Arena
-
-```bash
-# 🎯 Run main program - let AIs start trading!
-python main.py
-
-# 🎯 Or use custom configuration
-python main.py configs/my_config.json
-```
-
-### ⏰ Time Settings Example
-
-#### 📅 Create Custom Time Configuration
-```json
-{
-  "agent_type": "BaseAgent",
-  "date_range": {
-    "init_date": "2024-01-01",  // Backtest start date
-    "end_date": "2024-03-31"     // Backtest end date
-  },
-  "models": [
-    {
-      "name": "claude-3.7-sonnet",
-      "basemodel": "anthropic/claude-3.7-sonnet",
-      "signature": "claude-3.7-sonnet",
-      "enabled": true
-    }
-  ]
-}
-```
-
-### 📈 Start Web Interface
-
-```bash
-cd docs
-python3 -m http.server 8000
-# Visit http://localhost:8000
-```
-
-## 📈 Performance Analysis
-
-### 🏆 Competition Rules
-
-| Rule Item | Setting | Description |
-|-----------|---------|-------------|
-| **💰 Initial Capital** | $10,000 | Starting capital for each AI model |
-| **📈 Trading Targets** | NASDAQ 100 | 100 top tech stocks |
-| **⏰ Trading Hours** | Weekdays | Monday to Friday |
-| **💲 Price Benchmark** | Opening Price | Trade using daily opening price |
-| **📝 Recording Method** | JSONL Format | Complete trading history records |
-
-## ⚙️ Configuration Guide
-
-### 📋 Configuration File Structure
+### 配置文件结构
 
 ```json
 {
@@ -348,254 +107,230 @@ python3 -m http.server 8000
   },
   "models": [
     {
-      "name": "claude-3.7-sonnet",
-      "basemodel": "anthropic/claude-3.7-sonnet",
-      "signature": "claude-3.7-sonnet",
+      "name": "gpt-5-crypto",
+      "basemodel": "openai/gpt-5",
+      "signature": "gpt-5-okx-crypto",
       "enabled": true
     }
   ],
   "agent_config": {
     "max_steps": 30,
-    "max_retries": 3,
-    "base_delay": 1.0,
     "initial_cash": 10000.0
-  },
-  "log_config": {
-    "log_path": "./data/agent_data"
   }
 }
 ```
 
-### 🔧 Configuration Parameters
+### 支持的交易对
 
-| Parameter | Description | Default Value |
-|-----------|-------------|---------------|
-| `agent_type` | AI agent type | "BaseAgent" |
-| `max_steps` | Maximum reasoning steps | 30 |
-| `max_retries` | Maximum retry attempts | 3 |
-| `base_delay` | Operation delay (seconds) | 1.0 |
-| `initial_cash` | Initial capital | $10,000 |
+#### 现货交易
+- BTC/USDT、ETH/USDT、SOL/USDT
+- BNB/USDT、XRP/USDT、ADA/USDT
+- 以及更多主流币种
 
-### 📊 Data Format
+#### 永续合约
+- BTC/USDT:USDT、ETH/USDT:USDT
+- SOL/USDT:USDT、BNB/USDT:USDT
+- 以及更多合约交易对
 
-#### 💰 Position Records (position.jsonl)
+---
+
+## 📁 项目架构
+
+```
+AI-Trader/
+├── 🤖 核心系统
+│   ├── main.py                     # 主程序入口
+│   ├── agent/base_agent/           # AI 代理核心
+│   └── configs/                    # 配置文件
+│
+├── 🛠️ MCP 工具链
+│   ├── agent_tools/
+│   │   ├── tool_trade_okx.py       # OKX 交易执行
+│   │   ├── tool_get_price_okx.py   # OKX 价格查询
+│   │   ├── tool_jina_search.py     # 信息搜索
+│   │   └── tool_math.py            # 数学计算
+│   └── tools/                      # 辅助工具
+│
+├── 📊 数据系统
+│   └── data/agent_data/            # AI 交易记录
+│
+└── 📋 文档
+    ├── README.md                   # 本文档
+    ├── DEPLOYMENT.md               # 详细部署教程
+    └── docs/                       # 其他文档
+```
+
+---
+
+## 🔧 功能说明
+
+### MCP 工具链
+
+| 工具 | 功能 | 说明 |
+|------|------|------|
+| **OKX交易工具** | 买入/卖出加密货币 | 支持现货和合约交易 |
+| **OKX价格工具** | 实时价格查询 | 支持多种交易对和市场类型 |
+| **搜索工具** | 市场信息搜索 | 获取新闻和市场动态 |
+| **数学工具** | 财务计算 | 支持基础数学运算 |
+
+### 交易功能
+
+#### 现货交易
+```python
+# 买入现货
+buy_okx(symbol="BTC/USDT", amount=0.001, trading_type="spot")
+
+# 卖出现货
+sell_okx(symbol="BTC/USDT", amount=0.001, trading_type="spot")
+```
+
+#### 永续合约交易
+```python
+# 开多单
+buy_okx(symbol="BTC/USDT:USDT", amount=1, trading_type="swap")
+
+# 平仓
+sell_okx(symbol="BTC/USDT:USDT", amount=1, trading_type="swap")
+```
+
+#### 价格查询
+```python
+# 查询现货价格
+get_current_price_okx(symbol="BTC/USDT", trading_type="spot")
+
+# 查询合约价格和资金费率
+get_current_price_okx(symbol="BTC/USDT:USDT", trading_type="swap")
+get_funding_rate_okx(symbol="BTC/USDT:USDT")
+```
+
+---
+
+## 📊 交易记录
+
+交易记录保存在 `data/agent_data/{signature}/position/position_okx.jsonl`：
+
 ```json
 {
-  "date": "2025-01-20",
+  "date": "2025-10-29",
   "id": 1,
   "this_action": {
     "action": "buy",
-    "symbol": "AAPL", 
-    "amount": 10
+    "symbol": "BTC/USDT",
+    "amount": 0.001,
+    "price": 45000.0,
+    "cost": 45.0,
+    "trading_type": "spot"
   },
   "positions": {
-    "AAPL": 10,
-    "MSFT": 0,
-    "CASH": 9737.6
+    "USDT": 9955.0,
+    "BTC": 0.001
   }
 }
 ```
 
-#### 📈 Price Data (merged.jsonl)
-```json
-{
-  "Meta Data": {
-    "2. Symbol": "AAPL",
-    "3. Last Refreshed": "2025-01-20"
-  },
-  "Time Series (Daily)": {
-    "2025-01-20": {
-      "1. buy price": "255.8850",
-      "2. high": "264.3750", 
-      "3. low": "255.6300",
-      "4. sell price": "262.2400",
-      "5. volume": "90483029"
-    }
-  }
-}
-```
+---
 
-### 📁 File Structure
+## ⚠️ 安全注意事项
 
-```
-data/agent_data/
-├── claude-3.7-sonnet/
-│   ├── position/
-│   │   └── position.jsonl      # 📝 Position records
-│   └── log/
-│       └── 2025-01-20/
-│           └── log.jsonl       # 📊 Trading logs
-├── gpt-4o/
-│   └── ...
-└── qwen3-max/
-    └── ...
-```
+### 重要提醒
 
-## 🔌 Third-Party Strategy Integration
+1. **测试先行**
+   - ✅ **务必先在测试网络测试**
+   - ✅ 从小额资金开始
+   - ⚠️ 充分理解系统后再使用真实资金
 
-AI-Trader Bench adopts a modular design, supporting easy integration of third-party strategies and custom AI agents.
+2. **API 密钥安全**
+   - ❌ 不要将密钥提交到代码仓库
+   - ✅ 使用环境变量管理
+   - ✅ 设置 IP 白名单
+   - ✅ 限制 API 权限（禁用提币）
 
-### 🛠️ Integration Methods
+3. **风险控制**
+   - ⚠️ 加密货币交易具有极高风险
+   - ⚠️ 仅投入可承受损失的资金
+   - ⚠️ 本系统仅供学习研究
 
-#### 1. Custom AI Agent
+---
+
+## 🚀 高级功能
+
+### 合约交易策略
+
+支持多种合约交易类型：
+- **永续合约 (swap)**: 无到期日的期货合约
+- **交割合约 (future)**: 有固定到期日的期货合约
+
+### 资金费率监控
+
 ```python
-# Create new AI agent class
-class CustomAgent(BaseAgent):
-    def __init__(self, model_name, **kwargs):
-        super().__init__(model_name, **kwargs)
-        # Add custom logic
+# 获取合约资金费率
+get_funding_rate_okx("BTC/USDT:USDT")
 ```
 
-#### 2. Register New Agent
+### 多市场查询
+
 ```python
-# Register in main.py
-AGENT_REGISTRY = {
-    "BaseAgent": {
-        "module": "agent.base_agent.base_agent",
-        "class": "BaseAgent"
-    },
-    "CustomAgent": {  # New addition
-        "module": "agent.custom.custom_agent",
-        "class": "CustomAgent"
-    },
-}
+# 列出所有现货市场
+list_okx_markets(trading_type="spot")
+
+# 列出所有永续合约
+list_okx_markets(trading_type="swap")
 ```
 
-#### 3. Configuration File Settings
-```json
-{
-  "agent_type": "CustomAgent",
-  "models": [
-    {
-      "name": "your-custom-model",
-      "basemodel": "your/model/path",
-      "signature": "custom-signature",
-      "enabled": true
-    }
-  ]
-}
-```
+---
 
-### 🔧 Extending Toolchain
+## 📖 文档
 
-#### Adding Custom Tools
-```python
-# Create new MCP tool
-@mcp.tools()
-class CustomTool:
-    def __init__(self):
-        self.name = "custom_tool"
-    
-    def execute(self, params):
-        # Implement custom tool logic
-        return result
-```
+- [📦 详细部署教程](DEPLOYMENT.md) - 完整的部署和配置指南
+- [🔧 OKX 集成指南](docs/OKX_INTEGRATION_GUIDE.md) - OKX API 使用说明
+- [💬 社区交流](Communication.md) - 加入我们的社区
 
-## 🚀 Roadmap
+---
 
-### 🌟 Future Plans
-- [ ] **🇨🇳 A-Share Support** - Extend to Chinese stock market
-- [ ] **📊 Post-Market Statistics** - Automatic profit analysis
-- [ ] **🔌 Strategy Marketplace** - Add third-party strategy sharing platform
-- [ ] **🎨 Cool Frontend Interface** - Modern web dashboard
-- [ ] **₿ Cryptocurrency** - Support digital currency trading
-- [ ] **📈 More Strategies** - Technical analysis, quantitative strategies
-- [ ] **⏰ Advanced Replay** - Support minute-level time precision and real-time replay
-- [ ] **🔍 Smart Filtering** - More precise future information detection and filtering
+## 🤝 贡献指南
 
-## 🤝 Contributing Guide
+欢迎贡献代码、提出建议或报告问题！
 
-We welcome contributions of all kinds! Especially AI trading strategies and agent implementations.
+1. Fork 本项目
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
 
-### 🧠 AI Strategy Contributions
-- **🎯 Trading Strategies**: Contribute your AI trading strategy implementations
-- **🤖 Custom Agents**: Implement new AI agent types
-- **📊 Analysis Tools**: Add new market analysis tools
-- **🔍 Data Sources**: Integrate new data sources and APIs
+---
 
-### 🐛 Issue Reporting
-- Use GitHub Issues to report bugs
-- Provide detailed reproduction steps
-- Include system environment information
+## 📄 许可证
 
-### 💡 Feature Suggestions
-- Propose new feature ideas in Issues
-- Describe use cases in detail
-- Discuss implementation approaches
+本项目采用 [MIT License](LICENSE) 开源协议。
 
-### 🔧 Code Contributions
-1. Fork the project
-2. Create a feature branch
-3. Implement your strategy or feature
-4. Add test cases
-5. Create a Pull Request
+---
 
-### 📚 Documentation Improvements
-- Improve README documentation
-- Add code comments
-- Write usage tutorials
-- Contribute strategy documentation
+## 免责声明
 
-### 🏆 Strategy Sharing
-- **📈 Technical Analysis Strategies**: AI strategies based on technical indicators
-- **📊 Quantitative Strategies**: Multi-factor models and quantitative analysis
-- **🔍 Fundamental Strategies**: Analysis strategies based on financial data
-- **🌐 Macro Strategies**: Strategies based on macroeconomic data
+⚠️ **重要声明**:
 
-## 📞 Support & Community
-
-- **💬 Discussions**: [GitHub Discussions](https://github.com/HKUDS/AI-Trader/discussions)
-- **🐛 Issues**: [GitHub Issues](https://github.com/HKUDS/AI-Trader/issues)
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
-## 🙏 Acknowledgments
-
-Thanks to the following open source projects and services:
-- [LangChain](https://github.com/langchain-ai/langchain) - AI application development framework
-- [MCP](https://github.com/modelcontextprotocol) - Model Context Protocol
-- [Alpha Vantage](https://www.alphavantage.co/) - Financial data API
-- [Jina AI](https://jina.ai/) - Information search service
-
-## Disclaimer
-
-The materials provided by the AI-Trader project are for research purposes only and do not constitute any investment advice. Investors should seek independent professional advice before making any investment decisions. Past performance, if any, should not be taken as an indicator of future results. You should note that the value of investments may go up as well as down, and there is no guarantee of returns. All content of the AI-Trader project is provided solely for research purposes and does not constitute a recommendation to invest in any of the mentioned securities or sectors. Investing involves risks. Please seek professional advice if needed.
+- 本系统仅供学习和研究使用
+- 不构成任何投资建议
+- 加密货币交易具有极高风险
+- 使用者需自行承担所有风险和损失
+- 开发团队不对任何交易损失负责
 
 ---
 
 <div align="center">
 
-**🌟 If this project helps you, please give us a Star!**
+**🌟 如果这个项目对你有帮助，请给我们一个 Star！**
 
-[![GitHub stars](https://img.shields.io/github/stars/HKUDS/AI-Trader?style=social)](https://github.com/HKUDS/AI-Trader)
-[![GitHub forks](https://img.shields.io/github/forks/HKUDS/AI-Trader?style=social)](https://github.com/HKUDS/AI-Trader)
+[![GitHub stars](https://img.shields.io/github/stars/openbmx/AI-Trader?style=social)](https://github.com/openbmx/AI-Trader)
 
-**🤖 Experience AI's full potential in financial markets through complete autonomous decision-making!**  
-**🛠️ Pure tool-driven execution with zero human intervention—a genuine AI trading arena!** 🚀
+**🤖 让 AI 在加密货币市场中完全自主决策！** 🚀
 
 </div>
 
 ---
 
-## ⭐ Star History
-
-*Community Growth Trajectory*
+## ⭐ 项目统计
 
 <div align="center">
-  <a href="https://star-history.com/#HKUDS/AI-Trader&Date">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=HKUDS/AI-Trader&type=Date&theme=dark" />
-      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=HKUDS/AI-Trader&type=Date" />
-      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=HKUDS/AI-Trader&type=Date" style="border-radius: 15px; box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);" />
-    </picture>
-  </a>
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=openbmx.AI-Trader&style=for-the-badge&color=00d4ff" alt="访问量">
 </div>
-
----
-
-<p align="center">
-  <em> ❤️ Thanks for visiting ✨ AI-Trader!</em><br><br>
-  <img src="https://visitor-badge.laobi.icu/badge?page_id=HKUDS.AI-Trader&style=for-the-badge&color=00d4ff" alt="Views">
-</p>

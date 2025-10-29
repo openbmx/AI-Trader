@@ -18,9 +18,13 @@ from tools.general_tools import get_config_value
 mcp = FastMCP("OKXPriceTools")
 
 
-def get_okx_client():
+def get_okx_client(trading_type: str = "spot"):
     """
     Get OKX exchange client instance
+    
+    Args:
+        trading_type: Trading type - "spot" for spot trading, "swap" for perpetual futures,
+                     "future" for delivery futures, "option" for options
     
     Returns:
         ccxt.okx: OKX exchange client
@@ -29,7 +33,7 @@ def get_okx_client():
     exchange = ccxt.okx({
         'enableRateLimit': True,
         'options': {
-            'defaultType': 'spot',
+            'defaultType': trading_type,
         }
     })
     
@@ -41,12 +45,16 @@ def get_okx_client():
 
 
 @mcp.tool()
-def get_current_price_okx(symbol: str) -> Dict[str, Any]:
+def get_current_price_okx(symbol: str, trading_type: str = "spot") -> Dict[str, Any]:
     """
     Get current market price for a cryptocurrency trading pair on OKX
     
     Args:
-        symbol: Trading pair symbol (e.g., "BTC/USDT", "ETH/USDT")
+        symbol: Trading pair symbol
+                - For spot: "BTC/USDT", "ETH/USDT"
+                - For perpetual swap: "BTC/USDT:USDT", "ETH/USDT:USDT"
+                - For delivery futures: "BTC/USDT:USDT-240329"
+        trading_type: Trading type - "spot", "swap", "future", "option" (default: "spot")
         
     Returns:
         Dict containing price information:
@@ -56,17 +64,21 @@ def get_current_price_okx(symbol: str) -> Dict[str, Any]:
           - ask: Current ask price
           - timestamp: Timestamp of the price
           - datetime: Human-readable datetime
+          - trading_type: Type of trading (spot/swap/future)
         
     Example:
+        >>> # Spot trading
         >>> result = get_current_price_okx("BTC/USDT")
-        >>> print(result)  # {"symbol": "BTC/USDT", "price": 45000.0, ...}
+        >>> # Perpetual futures
+        >>> result = get_current_price_okx("BTC/USDT:USDT", trading_type="swap")
     """
     try:
-        exchange = get_okx_client()
+        exchange = get_okx_client(trading_type)
         ticker = exchange.fetch_ticker(symbol)
         
         return {
             "symbol": symbol,
+            "trading_type": trading_type,
             "price": ticker.get('last'),
             "bid": ticker.get('bid'),
             "ask": ticker.get('ask'),
@@ -79,7 +91,8 @@ def get_current_price_okx(symbol: str) -> Dict[str, Any]:
     except Exception as e:
         return {
             "error": f"Failed to fetch price for {symbol}: {str(e)}",
-            "symbol": symbol
+            "symbol": symbol,
+            "trading_type": trading_type
         }
 
 
@@ -250,39 +263,89 @@ def get_orderbook_okx(symbol: str, limit: int = 20) -> Dict[str, Any]:
 
 
 @mcp.tool()
-def list_okx_markets() -> Dict[str, Any]:
+def list_okx_markets(trading_type: str = "spot") -> Dict[str, Any]:
     """
     List available trading markets on OKX
+    
+    Args:
+        trading_type: Trading type - "spot", "swap", "future", "option" (default: "spot")
     
     Returns:
         Dict containing list of available markets and trading pairs
         
     Example:
-        >>> result = list_okx_markets()
-        >>> print(result)  # {"markets": ["BTC/USDT", "ETH/USDT", ...]}
+        >>> # List spot markets
+        >>> result = list_okx_markets("spot")
+        >>> # List perpetual futures
+        >>> result = list_okx_markets("swap")
     """
     try:
-        exchange = get_okx_client()
+        exchange = get_okx_client(trading_type)
         markets = exchange.load_markets()
         
-        # Filter to show only spot markets
-        spot_markets = [
-            symbol for symbol, market in markets.items()
-            if market.get('spot', False) and market.get('active', False)
-        ]
+        # Filter markets by trading type
+        filtered_markets = []
+        for symbol, market in markets.items():
+            if trading_type == "spot" and market.get('spot', False):
+                filtered_markets.append(symbol)
+            elif trading_type == "swap" and market.get('swap', False):
+                filtered_markets.append(symbol)
+            elif trading_type == "future" and market.get('future', False):
+                filtered_markets.append(symbol)
+            elif trading_type == "option" and market.get('option', False):
+                filtered_markets.append(symbol)
         
-        # Get popular USDT pairs
-        usdt_pairs = [m for m in spot_markets if m.endswith('/USDT')]
+        # Get USDT pairs
+        usdt_pairs = [m for m in filtered_markets if 'USDT' in m]
         
         return {
-            "total_markets": len(spot_markets),
+            "trading_type": trading_type,
+            "total_markets": len(filtered_markets),
             "usdt_pairs_count": len(usdt_pairs),
-            "popular_usdt_pairs": sorted(usdt_pairs)[:50],  # Top 50 USDT pairs
-            "sample_markets": sorted(spot_markets)[:100]  # Sample of all markets
+            "usdt_pairs": sorted(usdt_pairs)[:100],  # Top 100 USDT pairs
+            "sample_markets": sorted(filtered_markets)[:100]  # Sample of all markets
         }
     except Exception as e:
         return {
-            "error": f"Failed to list markets: {str(e)}"
+            "error": f"Failed to list markets: {str(e)}",
+            "trading_type": trading_type
+        }
+
+
+@mcp.tool()
+def get_funding_rate_okx(symbol: str) -> Dict[str, Any]:
+    """
+    Get funding rate for perpetual swap contracts on OKX
+    
+    Args:
+        symbol: Perpetual swap symbol (e.g., "BTC/USDT:USDT")
+        
+    Returns:
+        Dict containing funding rate information
+        
+    Example:
+        >>> result = get_funding_rate_okx("BTC/USDT:USDT")
+        >>> print(result)  # {"symbol": "BTC/USDT:USDT", "funding_rate": 0.0001, ...}
+    """
+    try:
+        exchange = get_okx_client("swap")
+        
+        # Fetch funding rate
+        funding_rate = exchange.fetch_funding_rate(symbol)
+        
+        return {
+            "symbol": symbol,
+            "funding_rate": funding_rate.get('fundingRate'),
+            "funding_timestamp": funding_rate.get('fundingTimestamp'),
+            "funding_datetime": funding_rate.get('fundingDatetime'),
+            "next_funding_datetime": funding_rate.get('nextFundingDatetime'),
+            "mark_price": funding_rate.get('markPrice'),
+            "index_price": funding_rate.get('indexPrice')
+        }
+    except Exception as e:
+        return {
+            "error": f"Failed to fetch funding rate for {symbol}: {str(e)}",
+            "symbol": symbol
         }
 
 

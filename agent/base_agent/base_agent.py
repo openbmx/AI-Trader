@@ -21,7 +21,6 @@ project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 sys.path.insert(0, project_root)
 
 from tools.general_tools import extract_conversation, extract_tool_messages, get_config_value, write_config_value
-from tools.price_tools import add_no_trade_record
 from prompts.agent_prompt import get_agent_system_prompt, STOP_SIGNAL
 
 # Load environment variables
@@ -40,26 +39,18 @@ class BaseAgent:
     5. Position and configuration management
     """
     
-    # Default NASDAQ 100 stock symbols
-    DEFAULT_STOCK_SYMBOLS = [
-        "NVDA", "MSFT", "AAPL", "GOOG", "GOOGL", "AMZN", "META", "AVGO", "TSLA",
-        "NFLX", "PLTR", "COST", "ASML", "AMD", "CSCO", "AZN", "TMUS", "MU", "LIN",
-        "PEP", "SHOP", "APP", "INTU", "AMAT", "LRCX", "PDD", "QCOM", "ARM", "INTC",
-        "BKNG", "AMGN", "TXN", "ISRG", "GILD", "KLAC", "PANW", "ADBE", "HON",
-        "CRWD", "CEG", "ADI", "ADP", "DASH", "CMCSA", "VRTX", "MELI", "SBUX",
-        "CDNS", "ORLY", "SNPS", "MSTR", "MDLZ", "ABNB", "MRVL", "CTAS", "TRI",
-        "MAR", "MNST", "CSX", "ADSK", "PYPL", "FTNT", "AEP", "WDAY", "REGN", "ROP",
-        "NXPI", "DDOG", "AXON", "ROST", "IDXX", "EA", "PCAR", "FAST", "EXC", "TTWO",
-        "XEL", "ZS", "PAYX", "WBD", "BKR", "CPRT", "CCEP", "FANG", "TEAM", "CHTR",
-        "KDP", "MCHP", "GEHC", "VRSK", "CTSH", "CSGP", "KHC", "ODFL", "DXCM", "TTD",
-        "ON", "BIIB", "LULU", "CDW", "GFS"
+    # Default cryptocurrency trading pairs
+    DEFAULT_CRYPTO_SYMBOLS = [
+        "BTC/USDT", "ETH/USDT", "SOL/USDT", "BNB/USDT", "XRP/USDT",
+        "ADA/USDT", "DOGE/USDT", "DOT/USDT", "MATIC/USDT", "LINK/USDT",
+        "AVAX/USDT", "UNI/USDT", "ATOM/USDT", "LTC/USDT", "ETC/USDT"
     ]
     
     def __init__(
         self,
         signature: str,
         basemodel: str,
-        stock_symbols: Optional[List[str]] = None,
+        stock_symbols: Optional[List[str]] = None,  # Keep parameter name for compatibility
         mcp_config: Optional[Dict[str, Dict[str, Any]]] = None,
         log_path: Optional[str] = None,
         max_steps: int = 10,
@@ -76,7 +67,7 @@ class BaseAgent:
         Args:
             signature: Agent signature/name
             basemodel: Base model name
-            stock_symbols: List of stock symbols, defaults to NASDAQ 100
+            stock_symbols: List of trading symbols (kept for compatibility, now uses crypto symbols)
             mcp_config: MCP tool configuration, including port and URL information
             log_path: Log path, defaults to ./data/agent_data
             max_steps: Maximum reasoning steps
@@ -89,7 +80,7 @@ class BaseAgent:
         """
         self.signature = signature
         self.basemodel = basemodel
-        self.stock_symbols = stock_symbols or self.DEFAULT_STOCK_SYMBOLS
+        self.stock_symbols = stock_symbols or self.DEFAULT_CRYPTO_SYMBOLS
         self.max_steps = max_steps
         self.max_retries = max_retries
         self.base_delay = base_delay
@@ -123,23 +114,23 @@ class BaseAgent:
         self.position_file = os.path.join(self.data_path, "position", "position.jsonl")
         
     def _get_default_mcp_config(self) -> Dict[str, Dict[str, Any]]:
-        """Get default MCP configuration"""
+        """Get default MCP configuration for OKX crypto trading"""
         return {
             "math": {
                 "transport": "streamable_http",
                 "url": f"http://localhost:{os.getenv('MATH_HTTP_PORT', '8000')}/mcp",
             },
-            "stock_local": {
+            "okx_price": {
                 "transport": "streamable_http",
-                "url": f"http://localhost:{os.getenv('GETPRICE_HTTP_PORT', '8003')}/mcp",
+                "url": f"http://localhost:{os.getenv('GETPRICE_OKX_HTTP_PORT', '8005')}/mcp",
             },
             "search": {
                 "transport": "streamable_http",
                 "url": f"http://localhost:{os.getenv('SEARCH_HTTP_PORT', '8001')}/mcp",
             },
-            "trade": {
+            "okx_trade": {
                 "transport": "streamable_http",
-                "url": f"http://localhost:{os.getenv('TRADE_HTTP_PORT', '8002')}/mcp",
+                "url": f"http://localhost:{os.getenv('TRADE_OKX_HTTP_PORT', '8004')}/mcp",
             },
         }
     
@@ -280,7 +271,8 @@ class BaseAgent:
         else:
             print("📊 No trading, maintaining positions")
             try:
-                add_no_trade_record(today_date, self.signature)
+                # No trade today - skip recording for crypto (24/7 trading)
+                print(f"📝 No trade action for {today_date}")
             except NameError as e:
                 print(f"❌ NameError: {e}")
                 raise
@@ -313,7 +305,7 @@ class BaseAgent:
         print(f"✅ Agent {self.signature} registration completed")
         print(f"📁 Position file: {self.position_file}")
         print(f"💰 Initial cash: ${self.initial_cash}")
-        print(f"📊 Number of stocks: {len(self.stock_symbols)}")
+        print(f"📊 Number of trading symbols: {len(self.stock_symbols)}")
     
     def get_trading_dates(self, init_date: str, end_date: str) -> List[str]:
         """
@@ -440,7 +432,7 @@ class BaseAgent:
         }
     
     def __str__(self) -> str:
-        return f"BaseAgent(signature='{self.signature}', basemodel='{self.basemodel}', stocks={len(self.stock_symbols)})"
+        return f"BaseAgent(signature='{self.signature}', basemodel='{self.basemodel}', symbols={len(self.stock_symbols)})"
     
     def __repr__(self) -> str:
         return self.__str__()
