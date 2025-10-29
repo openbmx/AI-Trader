@@ -22,6 +22,7 @@ sys.path.insert(0, project_root)
 
 from tools.general_tools import extract_conversation, extract_tool_messages, get_config_value, write_config_value
 from prompts.agent_prompt import get_agent_system_prompt, STOP_SIGNAL
+from agent.ai_providers import create_ai_model, AIProviderConfig
 
 # Load environment variables
 load_dotenv()
@@ -145,14 +146,20 @@ class BaseAgent:
         self.tools = await self.client.get_tools()
         print(f"✅ Loaded {len(self.tools)} MCP tools")
         
-        # Create AI model
-        self.model = ChatOpenAI(
-            model=self.basemodel,
-            base_url=self.openai_base_url,
-            api_key=self.openai_api_key,
-            max_retries=3,
-            timeout=30
-        )
+        # Create AI model using the new provider system
+        try:
+            self.model = create_ai_model(
+                basemodel=self.basemodel,
+                openai_base_url=self.openai_base_url,
+                openai_api_key=self.openai_api_key,
+                max_retries=3,
+                timeout=30
+            )
+        except Exception as e:
+            print(f"❌ Failed to create AI model: {e}")
+            print(f"   Provider: {AIProviderConfig.get_provider_from_model(self.basemodel)}")
+            print(f"   Model: {AIProviderConfig.get_model_name(self.basemodel)}")
+            raise
         
         # Note: agent will be created in run_trading_session() based on specific date
         # because system_prompt needs the current date and price information

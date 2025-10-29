@@ -8,6 +8,7 @@ load_dotenv()
 
 # Import tools and prompts
 from tools.general_tools import get_config_value, write_config_value
+from tools.config_validator import run_validation
 from prompts.agent_prompt import all_crypto_symbols
 
 
@@ -91,12 +92,28 @@ def load_config(config_path=None):
         exit(1)
 
 
-async def main(config_path=None):
+async def main(config_path=None, skip_validation=False):
     """Run trading experiment using BaseAgent class
     
     Args:
         config_path: Configuration file path, if None use default config
+        skip_validation: Skip configuration validation (not recommended)
     """
+    # Determine config path
+    if config_path is None:
+        config_path = Path(__file__).parent / "configs" / "okx_crypto_config.json"
+    else:
+        config_path = Path(config_path)
+    
+    # Run validation unless explicitly skipped
+    if not skip_validation:
+        print("🔍 Validating configuration...")
+        if not run_validation(str(config_path)):
+            print("\n❌ Validation failed. Fix errors before proceeding.")
+            print("💡 To skip validation (not recommended), use --skip-validation flag")
+            exit(1)
+        print("✅ Validation passed!\n")
+    
     # Load configuration file
     config = load_config(config_path)
     
@@ -226,16 +243,34 @@ async def main(config_path=None):
     
 if __name__ == "__main__":
     import sys
+    import argparse
     
-    # Support specifying configuration file through command line arguments
-    # Usage: python livebaseagent_config.py [config_path]
-    # Example: python livebaseagent_config.py configs/my_config.json
-    config_path = sys.argv[1] if len(sys.argv) > 1 else None
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='AI-Trader: AI-driven cryptocurrency trading system')
+    parser.add_argument('config', nargs='?', default=None, help='Configuration file path')
+    parser.add_argument('--skip-validation', action='store_true', help='Skip configuration validation (not recommended)')
+    parser.add_argument('--validate-only', action='store_true', help='Only run validation, do not start trading')
     
+    args = parser.parse_args()
+    
+    config_path = args.config
+    
+    if args.validate_only:
+        # Run validation only
+        print("🔍 Running configuration validation only...\n")
+        config_to_validate = config_path or "configs/okx_crypto_config.json"
+        if run_validation(config_to_validate):
+            print("✅ Configuration is valid!")
+            sys.exit(0)
+        else:
+            print("❌ Configuration validation failed!")
+            sys.exit(1)
+    
+    # Normal operation
     if config_path:
         print(f"📄 Using specified configuration file: {config_path}")
     else:
         print(f"📄 Using default configuration file: configs/okx_crypto_config.json")
     
-    asyncio.run(main(config_path))
+    asyncio.run(main(config_path, skip_validation=args.skip_validation))
 
