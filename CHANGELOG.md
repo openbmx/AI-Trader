@@ -1,5 +1,215 @@
 # 更新日志
 
+## 2025-10-29 - v2.1.0 - 多AI提供商支持与生产环境增强
+
+### 🤖 新增功能
+
+#### 多AI模型提供商支持
+- ✅ **OpenAI**: GPT-4, GPT-3.5, GPT-4 Turbo等
+- ✅ **Ollama**: 本地自建模型 (Llama3, Mistral, Qwen等)
+- ✅ **DeepSeek**: 高性价比中国AI服务
+- ✅ **Anthropic Claude**: Claude 3.5 Sonnet, Claude 3 Opus
+- ✅ **GitHub Copilot**: 企业用户支持
+- ✅ **Google Gemini**: Gemini Pro, Gemini Ultra
+
+#### 统一AI提供商接口
+```python
+# 自动识别提供商
+basemodel = "ollama/llama3"      # Ollama
+basemodel = "openai/gpt-4"       # OpenAI
+basemodel = "deepseek/deepseek-chat"  # DeepSeek
+basemodel = "anthropic/claude-3-5-sonnet-20241022"  # Claude
+```
+
+#### 配置验证系统
+- ✅ 环境变量完整性检查
+- ✅ API密钥有效性验证
+- ✅ 配置文件格式验证
+- ✅ 系统资源检查
+- ✅ 安全配置审计
+
+#### 生产环境工具
+- ✅ 预部署检查脚本
+- ✅ 安全审计工具
+- ✅ 配置验证命令行工具
+
+### 📖 新增文档
+
+#### 完整的生产环境指南
+- 📖 **AI Providers Guide** (`docs/AI_PROVIDERS_GUIDE.md`)
+  - 6种AI提供商详细配置
+  - 使用场景和最佳实践
+  - 成本对比和选择建议
+  - 故障排除指南
+
+- 📖 **Production Guide** (`docs/PRODUCTION_GUIDE.md`)
+  - 生产环境部署清单
+  - 安全配置最佳实践
+  - 系统监控和告警
+  - 错误处理和恢复
+  - 备份策略
+  - 合规性建议
+
+### 🛠️ 示例配置
+
+#### 新增配置模板
+- `configs/ollama_config.json` - Ollama本地模型配置
+- `configs/deepseek_config.json` - DeepSeek配置
+- `configs/anthropic_config.json` - Anthropic Claude配置
+
+### 🔧 技术改进
+
+#### BaseAgent增强
+- 使用新的AI提供商工厂模式
+- 支持多种AI后端自动切换
+- 改进错误处理和日志记录
+
+#### 命令行工具增强
+```bash
+# 验证配置
+python main.py --validate-only
+
+# 跳过验证（不推荐）
+python main.py --skip-validation
+
+# 使用指定配置文件
+python main.py configs/ollama_config.json
+```
+
+### 🔐 安全增强
+
+#### 配置验证工具
+- 自动检查API密钥配置
+- 验证文件权限（.env应为600）
+- 检查敏感文件访问权限
+- OKX测试网/正式网环境确认
+
+#### 安全审计工具
+- 扫描代码中的硬编码密钥
+- 检测潜在的安全漏洞
+- 文件权限审计
+- 生成详细安全报告
+
+#### 预部署检查脚本
+```bash
+./scripts/pre_deployment_check.sh
+```
+- 9项全面检查
+- Python版本验证
+- 依赖完整性检查
+- 网络连接测试
+- 安全审计执行
+
+### 📝 环境变量更新
+
+#### 新增环境变量
+```bash
+# Ollama (本地模型)
+OLLAMA_API_BASE="http://localhost:11434/v1"
+
+# DeepSeek
+DEEPSEEK_API_BASE="https://api.deepseek.com/v1"
+DEEPSEEK_API_KEY="your_key"
+
+# Anthropic
+ANTHROPIC_API_KEY="your_key"
+
+# GitHub Copilot
+GITHUB_COPILOT_API_BASE="https://api.githubcopilot.com/v1"
+GITHUB_COPILOT_API_KEY="your_key"
+
+# Google Gemini
+GOOGLE_GEMINI_API_BASE="https://generativelanguage.googleapis.com/v1"
+GOOGLE_GEMINI_API_KEY="your_key"
+```
+
+### 📦 依赖更新
+- 新增 `python-dotenv>=1.0.0` 用于环境变量管理
+- 可选依赖: `langchain-anthropic` (用于Claude支持)
+
+### 🎯 使用场景推荐
+
+| 场景 | 推荐AI提供商 | 理由 |
+|------|-------------|------|
+| 高质量决策 | OpenAI GPT-4, Claude 3.5 | 最佳推理能力 |
+| 成本敏感 | DeepSeek, Ollama | 价格低廉或免费 |
+| 离线部署 | Ollama | 无需外网连接 |
+| 国内用户 | DeepSeek | 访问速度快 |
+| 企业用户 | GitHub Copilot | 已有订阅 |
+
+### 🔄 迁移指南
+
+#### 从单一AI提供商迁移
+如果您之前只使用OpenAI：
+
+1. **保持现有配置**：现有配置完全兼容
+2. **可选添加新提供商**：在 `.env` 中添加其他提供商密钥
+3. **更新配置文件**：在models中添加新模型
+
+示例：
+```json
+{
+  "models": [
+    {
+      "name": "gpt-4",
+      "basemodel": "openai/gpt-4",
+      "signature": "gpt-4-okx",
+      "enabled": true
+    },
+    {
+      "name": "ollama-llama3",
+      "basemodel": "ollama/llama3",
+      "signature": "llama3-okx",
+      "enabled": true
+    }
+  ]
+}
+```
+
+### ⚡ 性能优化
+
+#### 本地部署优势
+- Ollama可完全离线运行
+- 无API调用成本
+- 更低的延迟（本地网络）
+- 无速率限制
+
+#### 成本优化
+- DeepSeek价格约为OpenAI的1/10
+- Ollama完全免费（需要本地GPU）
+- 多模型并行可提高决策质量
+
+### 🐛 Bug修复
+- 修复API密钥验证逻辑
+- 改进错误信息提示
+- 优化日志输出格式
+
+### 📊 统计数据
+- **新增文件**: 8
+- **修改文件**: 5
+- **新增代码**: 约2000行
+- **新增文档**: 约13000字
+
+### 🚀 后续计划
+- [ ] 添加更多AI提供商（Cohere, Mistral AI等）
+- [ ] 实现AI模型性能对比功能
+- [ ] 添加自动故障转移（一个模型失败时切换到备用）
+- [ ] 实现成本追踪和预算控制
+- [ ] 添加模型响应质量评分
+
+### 📖 相关文档
+- [AI Providers Guide](docs/AI_PROVIDERS_GUIDE.md) - AI提供商配置详解
+- [Production Guide](docs/PRODUCTION_GUIDE.md) - 生产环境部署指南
+- [DEPLOYMENT.md](DEPLOYMENT.md) - 基础部署教程
+
+---
+
+**版本**: v2.1.0  
+**发布日期**: 2025-10-29  
+**重要性**: 🟢 重要更新 - 向后兼容
+
+---
+
 ## 2025-10-29 - 重大更新：专注加密货币交易
 
 ### 🚀 重大变更
