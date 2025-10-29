@@ -123,6 +123,9 @@ class SecurityAuditor:
         if line.strip().startswith('#'):
             return False
         
+        # Lowercase once for efficiency
+        line_lower = line.lower()
+        
         # Common patterns for API keys
         patterns = [
             r'["\']sk-[a-zA-Z0-9]{20,}["\']',  # OpenAI style keys
@@ -135,7 +138,7 @@ class SecurityAuditor:
         for pattern in patterns:
             if re.search(pattern, line, re.IGNORECASE):
                 # Exclude obvious placeholders
-                if any(placeholder in line.lower() for placeholder in 
+                if any(placeholder in line_lower for placeholder in 
                        ['your_', 'example', 'placeholder', 'dummy', 'test_key', 'fake']):
                     continue
                 return True
@@ -166,8 +169,10 @@ class SecurityAuditor:
         """Check for insecure random number generation"""
         # Only flag if used in security context
         if 'random.' in line and not 'secrets.' in line:
+            # Lowercase once for efficiency
+            line_lower = line.lower()
             security_keywords = ['key', 'token', 'password', 'secret', 'salt', 'nonce']
-            return any(keyword in line.lower() for keyword in security_keywords)
+            return any(keyword in line_lower for keyword in security_keywords)
         return False
     
     def audit_project(self) -> Dict[str, List[SecurityIssue]]:
@@ -203,13 +208,15 @@ class SecurityAuditor:
             if file_path.exists():
                 try:
                     stat_info = file_path.stat()
+                    # Extract permissions more explicitly
+                    perms = oct(stat_info.st_mode & 0o777)
                     # Check if file is readable by group or others
                     if stat_info.st_mode & 0o077:
                         issues.append(SecurityIssue(
                             SecurityIssue.SEVERITY_HIGH,
                             str(file_path),
                             0,
-                            f"Insecure file permissions: {oct(stat_info.st_mode)[-3:]}",
+                            f"Insecure file permissions: {perms}",
                             f"Run: chmod 600 {filename}"
                         ))
                 except Exception:

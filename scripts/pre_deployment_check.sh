@@ -56,6 +56,7 @@ echo ""
 
 echo "3️⃣  Checking file permissions..."
 if [ -f ".env" ]; then
+    # Cross-platform stat command: -c for Linux, -f for BSD/macOS
     perm=$(stat -c %a .env 2>/dev/null || stat -f %A .env 2>/dev/null)
     if [ "$perm" = "600" ]; then
         print_status 0 ".env permissions: $perm"
@@ -66,6 +67,7 @@ if [ -f ".env" ]; then
 fi
 
 if [ -f ".runtime_env.json" ]; then
+    # Cross-platform stat command: -c for Linux, -f for BSD/macOS
     perm=$(stat -c %a .runtime_env.json 2>/dev/null || stat -f %A .runtime_env.json 2>/dev/null)
     if [ "$perm" = "600" ]; then
         print_status 0 ".runtime_env.json permissions: $perm"
@@ -138,6 +140,22 @@ if [ -f ".env" ]; then
     
     if [ -n "$ANTHROPIC_API_KEY" ] && [ "$ANTHROPIC_API_KEY" != "your_anthropic_api_key_here" ]; then
         print_status 0 "ANTHROPIC_API_KEY is set"
+        ai_configured=true
+    fi
+    
+    if [ -n "$GITHUB_COPILOT_API_KEY" ] && [ "$GITHUB_COPILOT_API_KEY" != "your_github_copilot_token_here" ]; then
+        print_status 0 "GITHUB_COPILOT_API_KEY is set"
+        ai_configured=true
+    fi
+    
+    if [ -n "$GOOGLE_GEMINI_API_KEY" ] && [ "$GOOGLE_GEMINI_API_KEY" != "your_google_gemini_api_key_here" ]; then
+        print_status 0 "GOOGLE_GEMINI_API_KEY is set"
+        ai_configured=true
+    fi
+    
+    # Note: Ollama doesn't need an API key
+    if [ -n "$OLLAMA_API_BASE" ]; then
+        print_status 0 "OLLAMA_API_BASE is set (local model)"
         ai_configured=true
     fi
     
