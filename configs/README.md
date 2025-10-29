@@ -1,80 +1,34 @@
-# Configuration Files
+# 配置文件说明
 
-This directory contains configuration files for the AI-Trader Bench. These JSON configuration files define the parameters and settings used by the trading agents during execution.
+本目录包含 AI-Trader 系统的配置文件。
 
-## Files
+## 配置文件
 
-### `default_config.json`
+### okx_crypto_config.json
 
-The main configuration file that defines all system parameters. This file is loaded by `livebaseagent_config.py` and contains the following sections:
+OKX 加密货币交易配置文件（默认配置）
 
-#### Agent Configuration
-- **`agent_type`**: Specifies which agent class to use 
-- **`agent_config`**: Agent-specific parameters
-  - `max_steps`: Maximum number of reasoning steps per trading decision (default: 30)
-  - `max_retries`: Maximum retry attempts for failed operations (default: 3)
-  - `base_delay`: Base delay between operations in seconds (default: 1.0)
-  - `initial_cash`: Starting cash amount for trading (default: $10,000)
-
-#### Date Range
-- **`date_range`**: Trading period configuration
-  - `init_date`: Start date for trading simulation (format: YYYY-MM-DD)
-  - `end_date`: End date for trading simulation (format: YYYY-MM-DD)
-
-#### Model Configuration
-- **`models`**: List of AI models to use for trading decisions
-  - Each model entry contains:
-    - `name`: Display name for the model
-    - `basemodel`: Full model identifier/path
-    - `signature`: Model signature for API calls
-    - `enabled`: Boolean flag to enable/disable the model
-
-#### Logging Configuration
-- **`log_config`**: Logging parameters
-  - `log_path`: Directory path where agent data and logs are stored
-
-## Usage
-
-### Default Configuration
-The system automatically loads `default_config.json` when no specific configuration file is provided:
-
-```bash
-python livebaseagent_config.py
-```
-
-### Custom Configuration
-You can specify a custom configuration file:
-
-```bash
-python livebaseagent_config.py configs/my_custom_config.json
-```
-
-### Environment Variable Overrides
-Certain configuration values can be overridden using environment variables:
-- `INIT_DATE`: Overrides the initial trading date
-- `END_DATE`: Overrides the end trading date
-
-## Configuration Examples
-
-### Minimal Configuration
 ```json
 {
   "agent_type": "BaseAgent",
+  "trading_mode": "crypto_okx",
   "date_range": {
     "init_date": "2025-01-01",
     "end_date": "2025-01-31"
   },
   "models": [
     {
-      "name": "gpt-4o",
-      "basemodel": "openai/gpt-4o-2024-11-20",
-      "signature": "gpt-4o-2024-11-20",
+      "name": "gpt-5-crypto",
+      "basemodel": "openai/gpt-5",
+      "signature": "gpt-5-okx-crypto",
       "enabled": true
     }
   ],
   "agent_config": {
-    "max_steps": 10,
-    "initial_cash": 5000.0
+    "max_steps": 30,
+    "max_retries": 3,
+    "base_delay": 1.0,
+    "initial_cash": 10000.0
   },
   "log_config": {
     "log_path": "./data/agent_data"
@@ -82,50 +36,69 @@ Certain configuration values can be overridden using environment variables:
 }
 ```
 
-### Multi-Model Configuration
-```json
-{
-  "agent_type": "BaseAgent",
-  "date_range": {
-    "init_date": "2025-01-01",
-    "end_date": "2025-01-31"
-  },
-  "models": [
-    {
-      "name": "claude-3.7-sonnet",
-      "basemodel": "anthropic/claude-3.7-sonnet",
-      "signature": "claude-3.7-sonnet",
-      "enabled": true
-    },
-    {
-      "name": "gpt-4o",
-      "basemodel": "openai/gpt-4o-2024-11-20",
-      "signature": "gpt-4o-2024-11-20",
-      "enabled": true
-    },
-    {
-      "name": "qwen3-max",
-      "basemodel": "qwen/qwen3-max",
-      "signature": "qwen3-max",
-      "enabled": false
-    }
-  ],
-  "agent_config": {
-    "max_steps": 50,
-    "max_retries": 5,
-    "base_delay": 2.0,
-    "initial_cash": 20000.0
-  },
-  "log_config": {
-    "log_path": "./data/agent_data"
-  }
-}
+## 配置参数说明
+
+### 基础配置
+
+- **agent_type**: AI 代理类型，默认 "BaseAgent"
+- **trading_mode**: 交易模式，设置为 "crypto_okx" 表示使用 OKX 加密货币交易
+
+### 日期范围 (date_range)
+
+- **init_date**: 开始日期 (YYYY-MM-DD 格式)
+- **end_date**: 结束日期 (YYYY-MM-DD 格式)
+
+### 模型配置 (models)
+
+每个模型包含：
+- **name**: 模型显示名称
+- **basemodel**: 模型路径（例如 "openai/gpt-5"）
+- **signature**: 模型签名，用于标识交易记录
+- **enabled**: 是否启用该模型
+
+### AI代理配置 (agent_config)
+
+- **max_steps**: AI 最大推理步数（默认 30）
+- **max_retries**: 最大重试次数（默认 3）
+- **base_delay**: 操作延迟秒数（默认 1.0）
+- **initial_cash**: 初始资金，USDT（默认 10000.0）
+
+### 日志配置 (log_config)
+
+- **log_path**: 日志和交易记录保存路径
+
+## 创建自定义配置
+
+可以复制 `okx_crypto_config.json` 并修改以创建自定义配置：
+
+```bash
+cp okx_crypto_config.json my_config.json
+# 编辑 my_config.json
+nano my_config.json
 ```
 
-## Notes
+然后使用自定义配置运行：
 
-- Configuration files must be valid JSON format
-- The system validates date ranges and ensures `init_date` is not greater than `end_date`
-- Only models with `enabled: true` will be used for trading simulations
-- Configuration errors will cause the system to exit with appropriate error messages
-- The configuration system supports dynamic agent class loading through the `AGENT_REGISTRY` mapping
+```bash
+python main.py configs/my_config.json
+```
+
+## 支持的交易对
+
+### 现货交易
+- BTC/USDT, ETH/USDT, SOL/USDT
+- BNB/USDT, XRP/USDT, ADA/USDT
+- DOGE/USDT, DOT/USDT, MATIC/USDT
+- 等更多交易对
+
+### 永续合约
+- BTC/USDT:USDT, ETH/USDT:USDT
+- SOL/USDT:USDT, BNB/USDT:USDT
+- 等更多合约交易对
+
+## 注意事项
+
+1. 配置文件必须是有效的 JSON 格式
+2. 日期格式必须为 YYYY-MM-DD
+3. initial_cash 单位为 USDT
+4. 建议先在测试网络上测试配置
