@@ -24,7 +24,9 @@ class MCPServiceManager:
             'math': int(os.getenv('MATH_HTTP_PORT', '8000')),
             'search': int(os.getenv('SEARCH_HTTP_PORT', '8001')),
             'trade': int(os.getenv('TRADE_HTTP_PORT', '8002')),
-            'price': int(os.getenv('GETPRICE_HTTP_PORT', '8003'))
+            'price': int(os.getenv('GETPRICE_HTTP_PORT', '8003')),
+            'trade_okx': int(os.getenv('TRADE_OKX_HTTP_PORT', '8004')),
+            'price_okx': int(os.getenv('GETPRICE_OKX_HTTP_PORT', '8005'))
         }
         
         # Service configurations
@@ -48,6 +50,18 @@ class MCPServiceManager:
                 'script': 'tool_get_price_local.py',
                 'name': 'LocalPrices',
                 'port': self.ports['price']
+            },
+            'trade_okx': {
+                'script': 'tool_trade_okx.py',
+                'name': 'OKXTradeTools',
+                'port': self.ports['trade_okx'],
+                'optional': True  # Mark as optional since it requires OKX API credentials
+            },
+            'price_okx': {
+                'script': 'tool_get_price_okx.py',
+                'name': 'OKXPriceTools',
+                'port': self.ports['price_okx'],
+                'optional': True  # Mark as optional
             }
         }
         
@@ -70,8 +84,12 @@ class MCPServiceManager:
         script_path = config['script']
         service_name = config['name']
         port = config['port']
+        is_optional = config.get('optional', False)
         
         if not Path(script_path).exists():
+            if is_optional:
+                print(f"⚠️  Optional service skipped (script not found): {service_name}")
+                return False
             print(f"❌ Script file not found: {script_path}")
             return False
         
